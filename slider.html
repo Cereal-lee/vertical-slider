@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style>
+        .contanier{
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slider-contanier{
+            position: absolute;
+            width: 100%;
+        }
+
+        .slide{
+            position: absolute;
+            width: 100%;
+            padding: 0 10%;
+            box-sizing: border-box;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .slider-contanier.animated{
+            transition: top .5s ease-in;
+        }
+
+        #prev{
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translateY(-50%) translateX(1300%);
+            z-index: 10;
+            display: inline-block;
+            transition: all .5s ease-in;
+        }
+        #next{
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translateY(-50%) translateX(1300%);
+            z-index: 10;
+            display: inline-block;
+            transition: all .5s ease-in;
+        }
+
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 40px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 10%;
+            right: 50%;
+        }
+
+        ul{
+            margin: 0%;
+        }
+    </style>
+</head>
+<body>
+    <div class="contanier">
+        <ul class="slider-contanier" id="slider">
+            <li class="slide"><img src="images/img1.png">
+                <div class="numbertext">1</div>
+            </li>
+            <li class="slide"><img src="images/img2.png">
+                <div class="numbertext">2</div>
+            </li>
+        </ul>
+
+        <a href="#" id="prev"><img src="images/icon_화살표.png"></a>
+        <a href="#" id="next"><img src="images/icon_화살표2.png"></a>
+    </div>
+</body>
+
+<script>
+    var sliderWrapper = document.getElementsByClassName("contanier")
+    var sliderContanier = document.getElementsByClassName("slider-contanier")
+    var slides = document.getElementsByClassName("slide")
+    var slideCount = slides.length
+    var currentIndex = 0
+    var topHeight = 0
+    var navPrev = document.getElementById("prev")
+    var navNext = document.getElementById("next")
+
+    function tallestSlide(){
+        for(var i = 0; i < slideCount; i++){
+            if(topHeight<slides[i].offsetHeight){
+                topHeight = slides[i].offsetHeight
+            }
+        }
+
+        sliderWrapper[0].style.height = topHeight+"px"
+        sliderContanier[0].style.height = topHeight+"px"
+    }
+
+    tallestSlide()
+
+    for(var i = 0; i < slideCount; i++){
+        slides[i].style.top = i*100+50+"%"
+    }
+
+    function goToSlide(idx){
+        sliderContanier[0].style.top = idx*-100+"%"
+        sliderContanier[0].classList.add("animated")
+        currentIndex = idx;
+    }
+
+    navPrev.addEventListener("click", function(e){
+        e.preventDefault()
+        if(currentIndex > 0){
+            goToSlide(currentIndex-1)
+        }else{
+            goToSlide(slideCount-1)
+        }
+        
+    })
+
+    navNext.addEventListener("click", function(e){
+        e.preventDefault()
+        if(currentIndex < (slideCount-1)){
+            goToSlide(currentIndex+1)
+        }else{
+            goToSlide(0)
+        }
+    })
+
+    function AutoSlide(){
+        if(currentIndex > 0){
+            goToSlide(currentIndex-1)
+        }else{
+            goToSlide(slideCount-1)
+        }
+        setTimeout(AutoSlide, 5000)
+    }
+
+    AutoSlide()
+    
+    goToSlide(0)
+    
+</script>
+</html>
